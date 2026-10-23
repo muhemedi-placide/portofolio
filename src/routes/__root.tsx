@@ -94,12 +94,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "Muhemedi Placide — Concepteur & développeur de logiciels" },
+      {
+        name: "twitter:title",
+        content: "Muhemedi Placide — Concepteur & développeur de logiciels",
+      },
       { name: "description", content: "Site vitrine de presentation de service placide" },
       { property: "og:description", content: "Site vitrine de presentation de service placide" },
       { name: "twitter:description", content: "Site vitrine de presentation de service placide" },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/1vb7WtcK0aUpe8tcjtKD1z2q0ll1/social-images/social-1782369767322-placide_muhemedi_salumu.webp" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/1vb7WtcK0aUpe8tcjtKD1z2q0ll1/social-images/social-1782369767322-placide_muhemedi_salumu.webp" },
+      {
+        property: "og:image",
+        content:
+          "https://storage.googleapis.com/gpt-engineer-file-uploads/1vb7WtcK0aUpe8tcjtKD1z2q0ll1/social-images/social-1782369767322-placide_muhemedi_salumu.webp",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://storage.googleapis.com/gpt-engineer-file-uploads/1vb7WtcK0aUpe8tcjtKD1z2q0ll1/social-images/social-1782369767322-placide_muhemedi_salumu.webp",
+      },
     ],
     links: [
       {
@@ -120,7 +131,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="fr">
       <head>
         <HeadContent />
       </head>
@@ -144,4 +155,3 @@ function RootComponent() {
     </QueryClientProvider>
   );
 }
-

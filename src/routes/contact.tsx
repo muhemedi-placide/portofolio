@@ -78,7 +78,7 @@ function ContactPage() {
     if (!parsed.success) {
       toast.error(
         parsed.error.issues[0]?.message ??
-          t("Veuillez vérifier le formulaire", "Please check the form")
+          t("Veuillez vérifier le formulaire", "Please check the form"),
       );
       return;
     }
@@ -98,8 +98,8 @@ function ContactPage() {
       toast.success(
         t(
           "Merci pour votre message. Votre demande a bien été envoyée.",
-          "Thanks for your message. Your request has been sent."
-        )
+          "Thanks for your message. Your request has been sent.",
+        ),
       );
       form.reset();
       setSent(true);
@@ -114,30 +114,28 @@ function ContactPage() {
 
   return (
     <Layout>
-      <section className="section-pad bg-gradient-to-b from-brand-paper/60 to-background">
-        <div className="mx-auto max-w-6xl px-4 md:px-8">
+      <section className="section-pad">
+        <div className="site-container">
           <SectionTitle
-            eyebrow={t("Contact", "Contact")}
-            title={t("Discutons de votre projet", "Let's discuss your project")}
+            as="h1"
+            eyebrow={t("Prenons contact", "Get in touch")}
+            title={t("Discutons de votre projet.", "Let's discuss your project.")}
             subtitle={t(
-              "Vous avez besoin d'un site web, d'un logiciel de gestion ou d'un système personnalisé ? Envoyez-moi un message pour une première analyse.",
-              "Need a website, a management software or a custom system? Send me a message for a first analysis."
+              "Une idée à concrétiser ou une activité à simplifier ? Dites-moi ce dont vous avez besoin, et regardons ensemble la suite.",
+              "An idea to bring to life or a business to simplify? Tell me what you need and let's work out the next step together.",
             )}
           />
-
-          <div className="mt-10 grid gap-8 lg:grid-cols-[1.4fr_1fr]">
+          <div className="mt-12 grid items-start gap-12 lg:grid-cols-[1.4fr_0.85fr] lg:gap-20">
             {sent ? (
-              <div className="card-soft p-8 md:p-10 text-center">
-                <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-brand-green/10 text-brand-green">
-                  <Send size={22} />
-                </div>
-                <h3 className="mt-4 font-display text-xl font-bold text-brand-navy">
+              <div className="rounded-xl border border-border bg-brand-paper/50 px-6 py-14 text-center">
+                <Send size={28} className="mx-auto text-brand-green" />
+                <h2 className="mt-5 text-2xl font-semibold">
                   {t("Merci pour votre message", "Thanks for your message")}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                </h2>
+                <p className="mt-3 text-sm leading-7 text-muted-foreground">
                   {t(
                     "Votre demande a bien été envoyée. Je vous répondrai rapidement.",
-                    "Your request has been sent. I'll get back to you shortly."
+                    "Your request has been sent. I'll get back to you shortly.",
                   )}
                 </p>
                 <button
@@ -149,115 +147,177 @@ function ContactPage() {
                 </button>
               </div>
             ) : (
-            <form onSubmit={handleSubmit} className="card-soft p-6 md:p-8">
-              <div className="grid gap-5 md:grid-cols-2">
-                <Field label={t("Nom complet *", "Full name *")} name="fullName" required />
-                <Field label={t("Email *", "Email *")} name="email" type="email" required />
-                <Field label={t("Téléphone", "Phone")} name="phone" type="tel" />
-                <div>
-                  <label className="mb-1.5 block text-sm font-semibold text-brand-navy">
-                    {t("Type de projet *", "Project type *")}
-                  </label>
-                  <select
-                    name="projectType"
-                    required
-                    defaultValue=""
-                    className="w-full rounded-xl border border-input bg-white px-4 py-3 text-sm text-foreground outline-none transition-all focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/30"
-                  >
-                    <option value="" disabled>{t("Choisir…", "Choose…")}</option>
-                    {projectTypesFR.map((pt) => (
-                      <option key={pt} value={pt}>
-                        {lang === "en" ? projectTypesEN[pt] ?? pt : pt}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="md:col-span-2">
+              <form onSubmit={handleSubmit}>
+                <h2 className="text-lg font-semibold">
+                  {t("Parlez-moi de votre besoin", "Tell me what you need")}
+                </h2>
+                <p className="mt-2 mb-7 text-xs leading-6 text-muted-foreground">
+                  {t(
+                    "Les champs marqués d’un * sont obligatoires.",
+                    "Fields marked with * are required.",
+                  )}
+                </p>
+                <div className="grid gap-5 sm:grid-cols-2">
                   <Field
-                    label={t("Budget estimatif", "Estimated budget")}
-                    name="estimatedBudget"
-                    placeholder={t("ex. 2 500 000 FBu", "e.g. 2,500,000 FBu")}
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="mb-1.5 block text-sm font-semibold text-brand-navy">
-                    {t("Message *", "Message *")}
-                  </label>
-                  <textarea
-                    name="message"
+                    label={t("Nom complet *", "Full name *")}
+                    name="fullName"
+                    autoComplete="name"
+                    maxLength={100}
+                    placeholder={t("Votre nom", "Your name")}
                     required
-                    rows={5}
-                    className="w-full resize-y rounded-xl border border-input bg-white px-4 py-3 text-sm text-foreground outline-none transition-all focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/30"
-                    placeholder={t(
-                      "Parlez-moi de votre projet, vos objectifs et vos contraintes…",
-                      "Tell me about your project, your goals and your constraints…"
-                    )}
                   />
-                </div>
-              </div>
-              <button type="submit" disabled={submitting} className="btn-gold mt-6">
-                <Send size={16} />{" "}
-                {submitting ? t("Envoi…", "Sending…") : t("Envoyer le message", "Send message")}
-              </button>
-            </form>
-            )}
-
-            <div className="space-y-5">
-              <div className="card-soft relative overflow-hidden p-6">
-                <div className="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full bg-brand-gold/15 blur-2xl" />
-                <div className="relative">
-                  <div className="flex items-center gap-3">
-                    <div className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-brand-navy font-display text-lg font-bold text-white">
-                      MP
-                    </div>
-                    <div className="min-w-0">
-                      <p className="truncate font-display text-base font-semibold text-brand-navy">
-                        {profile.name}
-                      </p>
-                      <p className="truncate text-xs text-muted-foreground">{translate(profile.title, lang)}</p>
-                    </div>
+                  <Field
+                    label="Email *"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    maxLength={255}
+                    placeholder={t("vous@entreprise.com", "you@company.com")}
+                    required
+                  />
+                  <Field
+                    label={t("Téléphone", "Phone")}
+                    name="phone"
+                    type="tel"
+                    autoComplete="tel"
+                    maxLength={40}
+                    placeholder="+257 …"
+                  />
+                  <div>
+                    <label htmlFor="contact-projectType" className="mb-2 block text-xs font-medium">
+                      {t("Type de projet *", "Project type *")}
+                    </label>
+                    <select
+                      id="contact-projectType"
+                      name="projectType"
+                      required
+                      defaultValue=""
+                      className="form-control"
+                    >
+                      <option value="" disabled>
+                        {t("Sélectionner un projet", "Select a project")}
+                      </option>
+                      {projectTypesFR.map((type) => (
+                        <option key={type} value={type}>
+                          {lang === "en" ? (projectTypesEN[type] ?? type) : type}
+                        </option>
+                      ))}
+                    </select>
                   </div>
-                  <ul className="mt-5 space-y-3 text-sm text-foreground/80">
-                    <li className="flex items-start gap-3">
-                      <Briefcase size={16} className="mt-0.5 shrink-0 text-brand-green" />
-                      <span>{translate(profile.position, lang)}</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <MapPin size={16} className="mt-0.5 shrink-0 text-brand-green" />
-                      <span>{translate(profile.status, lang)}</span>
-                    </li>
-                    <li className="flex items-start gap-3 text-brand-green">
-                      <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-brand-green" />
-                      <span className="font-medium">
-                        {t("Disponible pour projets à distance", "Available for remote projects")}
-                      </span>
-                    </li>
-                  </ul>
+                  <div className="sm:col-span-2">
+                    <Field
+                      label={t("Budget estimatif", "Estimated budget")}
+                      name="estimatedBudget"
+                      maxLength={80}
+                      placeholder={t(
+                        "Une estimation, si vous en avez une",
+                        "An estimate, if you have one",
+                      )}
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label htmlFor="contact-message" className="mb-2 block text-xs font-medium">
+                      {t("Votre message *", "Your message *")}
+                    </label>
+                    <textarea
+                      id="contact-message"
+                      name="message"
+                      required
+                      minLength={10}
+                      maxLength={2000}
+                      rows={6}
+                      className="form-control resize-y"
+                      placeholder={t(
+                        "Votre activité, vos objectifs, ce que vous souhaitez améliorer…",
+                        "Your business, your goals, what you'd like to improve…",
+                      )}
+                    />
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="btn-gold mt-6 w-full sm:w-auto"
+                >
+                  {submitting
+                    ? t("Envoi en cours…", "Sending…")
+                    : t("Envoyer le message", "Send message")}{" "}
+                  <Send size={15} />
+                </button>
+              </form>
+            )}
+            <aside className="rounded-xl border border-border bg-brand-paper/60 p-7 lg:sticky lg:top-28">
+              <div className="flex items-center gap-3">
+                <img
+                  src="/images/placide_muhemedi_salumu.webp"
+                  alt="Muhemedi Placide"
+                  width={52}
+                  height={52}
+                  className="h-13 w-13 shrink-0 rounded-lg object-cover object-[78%_20%]"
+                />
+                <div>
+                  <p className="text-sm font-semibold">{profile.name}</p>
+                  <p className="mt-1 text-[11px] text-muted-foreground">
+                    {translate(profile.title, lang)}
+                  </p>
                 </div>
               </div>
-
-              <div className="grid gap-3">
+              <p className="mt-6 text-sm leading-7 text-muted-foreground">
+                {t(
+                  "Vous préférez un échange direct ? Retrouvez-moi aussi par email ou sur WhatsApp.",
+                  "Prefer a direct conversation? You can also reach me by email or on WhatsApp.",
+                )}
+              </p>
+              <div className="mt-6 divide-y divide-border border-y border-border">
                 <a
-                  href={`https://wa.me/${profile.whatsapp.replace(/[^0-9]/g, "")}`}
+                  href={"mailto:" + profile.email}
+                  className="flex items-center gap-3 py-4 text-brand-navy hover:text-brand-green"
+                >
+                  <Mail size={17} className="shrink-0" />
+                  <span>
+                    <span className="block text-[11px] text-muted-foreground">Email</span>
+                    <span className="mt-1 block break-all text-xs font-medium">
+                      {profile.email}
+                    </span>
+                  </span>
+                </a>
+                <a
+                  href={"https://wa.me/" + profile.whatsapp.replace(/\D/g, "")}
                   target="_blank"
                   rel="noreferrer"
-                  className="btn-green w-full justify-center"
+                  className="flex items-center gap-3 py-4 hover:text-brand-green"
                 >
-                  <MessageCircle size={16} /> WhatsApp
-                </a>
-                <a href={`mailto:${profile.email}`} className="btn-outline-navy w-full justify-center">
-                  <Mail size={16} /> Email
+                  <MessageCircle size={17} />
+                  <span>
+                    <span className="block text-[11px] text-muted-foreground">WhatsApp</span>
+                    <span className="mt-1 block text-xs font-medium">{profile.whatsapp}</span>
+                  </span>
                 </a>
                 <a
                   href={profile.linkedin}
                   target="_blank"
                   rel="noreferrer"
-                  className="btn-outline-navy w-full justify-center"
+                  className="flex items-center gap-3 py-4 text-xs font-medium hover:text-brand-green"
                 >
-                  <Linkedin size={16} /> LinkedIn
+                  <Linkedin size={17} />
+                  {t("Retrouvons-nous sur LinkedIn", "Connect with me on LinkedIn")}
                 </a>
               </div>
-            </div>
+              <div className="mt-6 space-y-3 text-xs leading-6 text-muted-foreground">
+                <p className="flex items-start gap-2">
+                  <Briefcase size={14} className="mt-1 shrink-0" />
+                  {translate(profile.position, lang)}
+                </p>
+                <p className="flex items-start gap-2">
+                  <MapPin size={14} className="mt-1 shrink-0" />
+                  {translate(profile.status, lang)}
+                </p>
+                <p className="flex items-center gap-2 text-brand-green">
+                  <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand-green" />
+                  {t("Disponible pour vos projets à distance", "Available for remote projects")}
+                </p>
+              </div>
+            </aside>
           </div>
         </div>
       </section>
@@ -271,22 +331,31 @@ function Field({
   type = "text",
   required,
   placeholder,
+  autoComplete,
+  maxLength,
 }: {
   label: string;
   name: string;
   type?: string;
   required?: boolean;
   placeholder?: string;
+  autoComplete?: string;
+  maxLength?: number;
 }) {
   return (
     <div>
-      <label className="mb-1.5 block text-sm font-semibold text-brand-navy">{label}</label>
+      <label htmlFor={"contact-" + name} className="mb-2 block text-xs font-medium">
+        {label}
+      </label>
       <input
+        id={"contact-" + name}
         type={type}
         name={name}
         required={required}
         placeholder={placeholder}
-        className="w-full rounded-xl border border-input bg-white px-4 py-3 text-sm text-foreground outline-none transition-all focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/30"
+        autoComplete={autoComplete}
+        maxLength={maxLength}
+        className="form-control"
       />
     </div>
   );

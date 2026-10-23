@@ -1,5 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Check, Compass, HelpCircle, Lock, Mail, ShieldCheck, Sparkles, TrendingUp, X } from "lucide-react";
+import {
+  ArrowRight,
+  Check,
+  Compass,
+  Lock,
+  Mail,
+  ShieldCheck,
+  Sparkles,
+  TrendingUp,
+  X,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { checkPricingCode } from "@/lib/pricing-code.functions";
 import { Layout } from "@/components/site/Layout";
@@ -21,8 +31,7 @@ export const Route = createFileRoute("/tarificataire")({
       { property: "og:title", content: "Grille tarifaire — Muhemedi Placide" },
       {
         property: "og:description",
-        content:
-          "Tarifs clairs pour vos projets numériques : visibilité, gestion et institution.",
+        content: "Tarifs clairs pour vos projets numériques : visibilité, gestion et institution.",
       },
     ],
   }),
@@ -48,8 +57,8 @@ const accentClasses: Record<string, { ring: string; chip: string; btn: string }>
     btn: "btn-green",
   },
   gold: {
-    ring: "ring-2 ring-brand-gold md:scale-[1.03]",
-    chip: "bg-brand-gold/15 text-brand-gold",
+    ring: "border-brand-green ring-1 ring-brand-green",
+    chip: "bg-brand-green/10 text-brand-green",
     btn: "btn-gold",
   },
   navy: {
@@ -74,9 +83,9 @@ function TarifsPage() {
   }, []);
 
   const mailto = `mailto:muhemediplacide2011@gmail.com?subject=${encodeURIComponent(
-    "Demande de code d'accès aux tarifs"
+    "Demande de code d'accès aux tarifs",
   )}&body=${encodeURIComponent(
-    "Bonjour Placide,\n\nJe souhaite recevoir le code d'accès pour consulter vos tarifs.\n\nNom :\nTéléphone :\nProjet :\n\nMerci."
+    "Bonjour Placide,\n\nJe souhaite recevoir le code d'accès pour consulter vos tarifs.\n\nNom :\nTéléphone :\nProjet :\n\nMerci.",
   )}`;
 
   async function submitCode(e: React.FormEvent) {
@@ -98,75 +107,99 @@ function TarifsPage() {
 
   return (
     <Layout>
-      <section className="section-pad bg-gradient-to-b from-brand-paper/60 to-background">
+      <section className="section-pad border-b border-border bg-[#fbfcf8]">
         <div className="mx-auto max-w-6xl px-4 md:px-8">
           <SectionTitle
+            as="h1"
             eyebrow={t("Tarifs", "Pricing")}
-            title={t(
-              "Une tarification simple et transparente",
-              "Simple, transparent pricing"
-            )}
+            title={t("Une tarification simple et transparente", "Simple, transparent pricing")}
             subtitle={t(
               "Choisissez le pack adapté à votre étape — et qui évolue avec vous.",
-              "Choose the pack that fits your stage — and grows with you."
+              "Choose the pack that fits your stage — and grows with you.",
             )}
           />
 
           {!unlocked && (
-            <div className="card-soft mx-auto mt-10 max-w-2xl p-6 text-center">
-              <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-brand-gold/15 text-brand-gold">
-                <Lock size={22} />
-              </div>
-              <p className="mt-4 text-sm text-muted-foreground">
-                {t(
-                  "Les montants sont masqués. Demandez votre code d'accès par email pour afficher les tarifs.",
-                  "Prices are hidden. Request your access code by email to display them."
-                )}
-              </p>
-              {!open ? (
-                <a href={mailto} onClick={() => setOpen(true)} className="btn-gold mt-5 inline-flex">
-                  <Mail size={16} /> {t("Afficher le tarif", "Show pricing")}
-                </a>
-              ) : (
-                <div className="mt-5 space-y-4">
-                  <a href={mailto} className="btn-outline-navy inline-flex text-sm">
-                    <Mail size={16} /> {t("Écrire à nouveau par email", "Email me again")}
-                  </a>
-                  <form onSubmit={submitCode} className="flex flex-col gap-3 sm:flex-row sm:justify-center">
-                    <input
-                      value={code}
-                      onChange={(e) => setCode(e.target.value)}
-                      placeholder={t("Entrez votre code d'accès", "Enter your access code")}
-                      className="h-12 rounded-xl border border-border bg-background px-4 text-sm"
-                    />
-                    <button type="submit" disabled={busy || !code} className="btn-gold justify-center">
-                      {t("Valider", "Submit")}
-                    </button>
-                  </form>
-                  {err && <p className="text-sm text-destructive">{err}</p>}
+            <div className="mt-9 rounded-xl border border-border bg-white p-5 md:p-6">
+              <div className="flex flex-col justify-between gap-5 md:flex-row md:items-center">
+                <div className="flex items-start gap-3">
+                  <Lock size={18} className="mt-1 shrink-0 text-brand-green" />
+                  <div>
+                    <h2 className="text-sm font-semibold">
+                      {t("Des tarifs adaptés à votre projet", "Pricing to suit your project")}
+                    </h2>
+                    <p className="mt-1 max-w-lg text-xs leading-6 text-muted-foreground">
+                      {t(
+                        "Demandez votre code par email pour consulter les montants, ou utilisez le code que vous avez déjà reçu.",
+                        "Request your access code by email to see prices, or use the code you have already received.",
+                      )}
+                    </p>
+                  </div>
                 </div>
+                <div className="flex shrink-0 flex-wrap items-center gap-4">
+                  <a href={mailto} onClick={() => setOpen(true)} className="btn-gold">
+                    <Mail size={15} />
+                    {t("Afficher le tarif", "Show pricing")}
+                  </a>
+                  {!open && (
+                    <button type="button" onClick={() => setOpen(true)} className="text-link">
+                      {t("J’ai déjà un code", "I have a code")}
+                    </button>
+                  )}
+                </div>
+              </div>
+              {open && (
+                <form
+                  onSubmit={submitCode}
+                  className="mt-5 flex flex-col gap-3 border-t border-border pt-5 sm:flex-row"
+                >
+                  <label htmlFor="pricing-code" className="sr-only">
+                    {t("Code d’accès", "Access code")}
+                  </label>
+                  <input
+                    id="pricing-code"
+                    value={code}
+                    onChange={(event) => setCode(event.target.value)}
+                    placeholder={t("Entrez votre code d'accès", "Enter your access code")}
+                    maxLength={50}
+                    className="form-control sm:max-w-xs"
+                    autoComplete="off"
+                  />
+                  <button type="submit" disabled={busy || !code} className="btn-gold">
+                    {busy ? t("Vérification…", "Checking…") : t("Valider", "Submit")}
+                  </button>
+                  {err && (
+                    <p role="alert" className="self-center text-sm text-destructive">
+                      {err}
+                    </p>
+                  )}
+                </form>
               )}
             </div>
           )}
 
-          <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             {displayRows.map((p) => {
               const a = accentClasses[p.accent];
               return (
-                <div
-                  key={p.tier}
-                  className={`card-soft card-soft-hover relative flex flex-col p-7 ${a.ring}`}
-                >
+                <div key={p.tier} className={`card-soft relative flex flex-col p-6 ${a.ring}`}>
                   {p.featured && (
-                    <span className="absolute -top-3 left-1/2 inline-flex -translate-x-1/2 items-center gap-1 rounded-full bg-brand-gold px-3 py-1 text-xs font-semibold text-white shadow">
-                      <Sparkles size={12} /> {p.badge ? translate(p.badge, lang) : t("Plus demandé", "Most requested")}
+                    <span className="absolute -top-3 left-1/2 inline-flex -translate-x-1/2 items-center gap-1 rounded-full bg-brand-green px-3 py-1 text-[10px] font-semibold text-white">
+                      <Sparkles size={12} />{" "}
+                      {p.badge ? translate(p.badge, lang) : t("Plus demandé", "Most requested")}
                     </span>
                   )}
-                  <span className={`inline-block w-fit rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider ${a.chip}`}>
+                  <span
+                    className={`inline-block w-fit rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider ${a.chip}`}
+                  >
                     {translate(p.tier, lang)}
                   </span>
-                  <h3 className="mt-4 font-display text-xl font-bold text-brand-navy">{translate(p.title, lang)}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{translate(p.type, lang)}</p>
+                  <h3 className="mt-4 font-display text-xl font-bold text-brand-navy">
+                    {translate(p.title, lang)}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    {translate(p.type, lang)}
+                  </p>
 
                   <div className="my-6 h-px bg-border" />
 
@@ -214,7 +247,9 @@ function TarifsPage() {
                           <span className="font-semibold text-brand-navy">
                             {t("Idéal pour :", "Ideal for:")}
                           </span>{" "}
-                          <span className="text-muted-foreground">{translate(p.idealFor, lang)}</span>
+                          <span className="text-muted-foreground">
+                            {translate(p.idealFor, lang)}
+                          </span>
                         </p>
                       )}
                       {p.includes && (
@@ -222,7 +257,9 @@ function TarifsPage() {
                           <span className="font-semibold text-brand-navy">
                             {t("Inclus :", "Includes:")}
                           </span>{" "}
-                          <span className="text-muted-foreground">{translate(p.includes, lang)}</span>
+                          <span className="text-muted-foreground">
+                            {translate(p.includes, lang)}
+                          </span>
                         </p>
                       )}
                     </div>
@@ -248,78 +285,68 @@ function TarifsPage() {
           <p className="mx-auto mt-8 max-w-2xl text-center text-xs leading-relaxed text-muted-foreground/80">
             {t(
               `Les montants en shillings kényans (KES) sont indiqués à titre de conversion au taux du ${KES_RATE_DATE.fr} : 1 FBu ≈ ${KES_RATE_TEXT.fr} KES. La facturation reste en FBu.`,
-              `Kenyan shilling (KES) amounts are a conversion at the ${KES_RATE_DATE.en} rate: 1 FBu ≈ ${KES_RATE_TEXT.en} KES. Billing stays in FBu.`
+              `Kenyan shilling (KES) amounts are a conversion at the ${KES_RATE_DATE.en} rate: 1 FBu ≈ ${KES_RATE_TEXT.en} KES. Billing stays in FBu.`,
             )}
           </p>
 
-
           <p className="mt-10 text-center text-sm text-muted-foreground">
             {t("Vous hésitez ?", "Not sure?")}{" "}
-            <Link to="/contact" className="font-semibold text-brand-navy underline-offset-4 hover:underline">
+            <Link
+              to="/contact"
+              className="font-semibold text-brand-navy underline-offset-4 hover:underline"
+            >
               {t("Discutons de votre projet", "Let's talk about your project")}
             </Link>{" "}
-            {t("et nous vous orientons vers le bon pack.", "and we'll guide you to the right pack.")}
+            {t(
+              "et nous vous orientons vers le bon pack.",
+              "and we'll guide you to the right pack.",
+            )}
           </p>
         </div>
       </section>
 
-      {/* Plus qu'un tarif : un accompagnement */}
       <section className="section-pad">
-        <div className="mx-auto max-w-6xl px-4 md:px-8">
+        <div className="site-container grid gap-10 lg:grid-cols-[0.85fr_1.3fr] lg:gap-20">
           <SectionTitle
-            eyebrow={t("Accompagnement", "Support")}
-            title={t("Plus qu'un tarif : un accompagnement", "More than a price: a partnership")}
+            eyebrow={t("Après la mise en ligne", "Beyond launch")}
+            title={t(
+              "Plus qu’une livraison, un accompagnement.",
+              "Support that goes beyond delivery.",
+            )}
             subtitle={t(
-              "Mes tarifs ne couvrent pas seulement la création technique d'un site web ou d'un logiciel. Ils incluent une approche orientée vers la réussite du projet : compréhension du besoin, conseil, simplicité d'utilisation, visibilité, fidélisation et accompagnement après livraison.",
-              "My prices don't just cover the technical build of a website or software. They include a success-oriented approach: understanding the need, advice, ease of use, visibility, loyalty and post-delivery support."
+              "Conseil, prise en main et suivi technique : je reste à vos côtés pour faire vivre votre solution.",
+              "Advice, onboarding and technical support: I stay by your side to keep your solution working for you.",
             )}
           />
-          <div className="mt-10 grid gap-5 md:grid-cols-3">
-            {accompagnement.map((a, i) => {
-              const Icon = accompIcons[i];
+          <div className="divide-y divide-border border-y border-border">
+            {accompagnement.map((item, index) => {
+              const Icon = accompIcons[index];
               return (
-                <div key={a.title} className="card-soft card-soft-hover p-6">
-                  <div className="grid h-12 w-12 place-items-center rounded-2xl bg-brand-paper text-brand-green">
-                    <Icon size={22} />
+                <div key={item.title} className="flex gap-4 py-6">
+                  <Icon size={18} className="mt-1 shrink-0 text-brand-green" />
+                  <div>
+                    <h3 className="text-sm font-semibold">{translate(item.title, lang)}</h3>
+                    <p className="mt-2 text-sm leading-7 text-muted-foreground">
+                      {translate(item.description, lang)}
+                    </p>
                   </div>
-                  <h3 className="mt-5 font-display text-lg font-semibold text-brand-navy">
-                    {translate(a.title, lang)}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                    {translate(a.description, lang)}
-                  </p>
                 </div>
               );
             })}
           </div>
         </div>
       </section>
-
-      {/* FAQ */}
-      <section className="section-pad bg-brand-paper/50">
-        <div className="mx-auto max-w-3xl px-4 md:px-8">
+      <section className="section-pad border-t border-border bg-brand-paper/40">
+        <div className="site-container grid gap-8 lg:grid-cols-[0.85fr_1.3fr] lg:gap-20">
           <SectionTitle
-            eyebrow={t("FAQ", "FAQ")}
-            title={t("Foire aux questions", "Frequently asked questions")}
+            eyebrow="FAQ"
+            title={t("Les réponses à vos questions.", "Your questions, answered.")}
           />
-          <div className="mt-10 space-y-4">
-            {faq.map((item, i) => (
-              <details
-                key={i}
-                className="card-soft group p-6 open:shadow-md"
-              >
-                <summary className="flex cursor-pointer list-none items-start justify-between gap-4">
-                  <span className="flex items-start gap-3 font-display text-base font-semibold text-brand-navy">
-                    <HelpCircle size={20} className="mt-0.5 shrink-0 text-brand-gold" />
-                    {lang === "en" ? item.q.en : item.q.fr}
-                  </span>
-                  <span className="mt-1 shrink-0 text-brand-navy transition-transform group-open:rotate-45">
-                    +
-                  </span>
-                </summary>
-                <p className="mt-4 pl-8 text-sm leading-relaxed text-muted-foreground">
-                  {lang === "en" ? item.a.en : item.a.fr}
-                </p>
+          <div>
+            {faq.map((item, index) => (
+              <details key={index} className="quiet-detail">
+                <summary>{lang === "en" ? item.q.en : item.q.fr}</summary>
+                <p>{lang === "en" ? item.a.en : item.a.fr}</p>
               </details>
             ))}
           </div>
@@ -328,4 +355,3 @@ function TarifsPage() {
     </Layout>
   );
 }
-

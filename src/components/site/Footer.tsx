@@ -1,78 +1,82 @@
 import { Link } from "@tanstack/react-router";
-import { navLinks, profile } from "@/content/site";
-import { useLang, useT } from "@/i18n/context";
-import { translate } from "@/i18n/translations";
+import { ArrowUpRight } from "lucide-react";
+import { profile } from "@/content/site";
+import { useT } from "@/i18n/context";
 
 export function Footer() {
   const t = useT();
-  const { lang } = useLang();
   return (
-    <footer className="mt-16 bg-brand-navy text-white/90">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 md:grid-cols-3 md:px-8">
+    <footer className="border-t border-border bg-white">
+      <div className="site-container grid gap-10 py-12 md:grid-cols-[1.5fr_1fr_1.2fr] md:py-16">
         <div>
-          <h3 className="font-display text-xl font-semibold text-white">{profile.name}</h3>
-          <p className="mt-3 text-sm leading-relaxed text-white/70">
+          <Link to="/" className="text-lg font-semibold tracking-tight text-brand-navy">
+            Muhemedi Placide<span className="text-brand-green">.</span>
+          </Link>
+          <p className="mt-3 max-w-xs text-sm leading-7 text-muted-foreground">
             {t(
-              "Conception de logiciels, systèmes de gestion, sites web et solutions numériques.",
-              "Software design, management systems, websites and digital solutions."
+              "Des sites web et des logiciels pensés pour simplifier votre quotidien et faire avancer votre activité.",
+              "Websites and software designed to simplify your day and move your business forward.",
             )}
           </p>
+          <span className="mt-5 inline-flex items-center gap-2 text-xs text-brand-green">
+            <span className="h-1.5 w-1.5 rounded-full bg-brand-green" />
+            {t("Disponible pour vos projets", "Available for your projects")}
+          </span>
         </div>
         <div>
-          <h4 className="text-sm font-semibold uppercase tracking-wider text-brand-gold">
-            {t("Navigation", "Navigation")}
-          </h4>
-          <ul className="mt-4 space-y-2 text-sm">
-            {navLinks.map((l) => (
-              <li key={l.to}>
-                <Link to={l.to} className="text-white/80 transition-colors hover:text-brand-gold">
-                  {translate(l.label, lang)}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <p className="text-xs font-semibold text-brand-navy">{t("Explorer", "Explore")}</p>
+          <div className="mt-4 grid justify-items-start gap-3 text-sm text-muted-foreground">
+            <Link to="/galerie" className="hover:text-brand-green">
+              {t("Mes réalisations", "My projects")}
+            </Link>
+            <Link to="/tarificataire" className="hover:text-brand-green">
+              {t("Offres & tarifs", "Plans & pricing")}
+            </Link>
+            <Link to="/actualites" className="hover:text-brand-green">
+              {t("Actualités", "Journal")}
+            </Link>
+            <Link to="/contact" className="hover:text-brand-green">
+              {t("Contact", "Contact")}
+            </Link>
+          </div>
         </div>
         <div>
-          <h4 className="text-sm font-semibold uppercase tracking-wider text-brand-gold">
-            {t("Contact", "Contact")}
-          </h4>
-          <p className="mt-4 text-sm text-white/80">{translate(profile.position, lang)}</p>
-          <p className="text-sm text-white/80">{translate(profile.status, lang)}</p>
-          <ul className="mt-4 space-y-1.5 text-sm">
-            <li>
-              <a href={`mailto:${profile.email}`} className="text-white/80 hover:text-brand-gold">
-                {profile.email}
-              </a>
-            </li>
-            <li>
-              <a
-                href={`https://wa.me/${profile.whatsapp.replace(/[^0-9]/g, "")}`}
-                target="_blank"
-                rel="noreferrer"
-                className="text-white/80 hover:text-brand-gold"
-              >
-                WhatsApp : {profile.whatsapp}
-              </a>
-            </li>
-            <li>
-              <a
-                href={profile.linkedin}
-                target="_blank"
-                rel="noreferrer"
-                className="text-white/80 hover:text-brand-gold"
-              >
-                LinkedIn
-              </a>
-            </li>
-          </ul>
-          <Link to="/contact" className="mt-4 inline-block text-sm font-semibold text-brand-gold hover:underline">
-            {t("Discutons de votre projet →", "Let's discuss your project →")}
-          </Link>
+          <p className="text-xs font-semibold text-brand-navy">
+            {t("Restons en contact", "Let's stay in touch")}
+          </p>
+          <a
+            href={"mailto:" + profile.email}
+            className="mt-4 inline-block break-all text-sm text-muted-foreground hover:text-brand-green"
+          >
+            {profile.email}
+          </a>
+          <div className="mt-4 flex gap-5 text-sm text-muted-foreground">
+            <a
+              href={"https://wa.me/" + profile.whatsapp.replace(/\D/g, "")}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1 hover:text-brand-green"
+            >
+              WhatsApp <ArrowUpRight size={13} />
+            </a>
+            <a
+              href={profile.linkedin}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1 hover:text-brand-green"
+            >
+              LinkedIn <ArrowUpRight size={13} />
+            </a>
+          </div>
         </div>
       </div>
-      <div className="border-t border-white/10">
-        <p className="mx-auto max-w-6xl px-4 py-5 text-center text-xs text-white/60 md:px-8">
-          © 2026 {profile.name}. {t("Tous droits réservés.", "All rights reserved.")}
+      <div className="site-container flex flex-wrap justify-between gap-3 border-t border-border py-6 text-[11px] text-muted-foreground">
+        <p>
+          © {new Date().getFullYear()} Muhemedi Placide.{" "}
+          {t("Tous droits réservés.", "All rights reserved.")}
+        </p>
+        <p>
+          {t("Conçu avec soin. Développé pour durer.", "Thoughtfully designed. Built to last.")}
         </p>
       </div>
     </footer>

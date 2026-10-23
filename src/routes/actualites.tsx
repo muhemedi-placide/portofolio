@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Calendar } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Layout } from "@/components/site/Layout";
 import { SectionTitle } from "@/components/site/SectionTitle";
 import { articles } from "@/content/site";
@@ -30,6 +30,7 @@ function formatDate(iso: string, lang: string) {
     day: "numeric",
     month: "long",
     year: "numeric",
+    timeZone: "UTC",
   });
 }
 
@@ -38,64 +39,85 @@ function ActualitesPage() {
   const { lang } = useLang();
   return (
     <Layout>
-      <section className="section-pad bg-gradient-to-b from-brand-paper/60 to-background">
-        <div className="mx-auto max-w-6xl px-4 md:px-8">
+      <section className="section-pad">
+        <div className="site-container">
           <SectionTitle
-            eyebrow={t("Le blog", "The blog")}
-            title={t("Actualités & mises à jour", "News & updates")}
+            as="h1"
+            eyebrow={t("Le journal", "The journal")}
+            title={t("Idées, conseils et coulisses.", "Ideas, insights and behind the scenes.")}
             subtitle={t(
-              "Je partage ici les nouveautés, les évolutions de mes projets, les conseils techniques et les mises à jour importantes de mes travaux.",
-              "I share here the latest news, project updates, technical advice and important announcements about my work."
+              "Un regard sur mes projets, les outils que je développe et ce qui peut aider votre activité à progresser.",
+              "A look at my projects, the tools I build and the ideas that can help your business grow.",
             )}
           />
-
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
-            {articles.map((a) => (
-              <article key={a.slug} className="card-soft card-soft-hover flex flex-col overflow-hidden">
+          <div className="mt-10 grid gap-x-8 gap-y-12 md:grid-cols-3">
+            {articles.map((article, index) => (
+              <article
+                key={article.slug}
+                className={
+                  index === 0
+                    ? "group overflow-hidden rounded-xl border border-border bg-brand-paper/45 md:col-span-3 md:grid md:grid-cols-[1.15fr_1fr]"
+                    : "group flex flex-col"
+                }
+              >
                 <Link
                   to="/actualites/$slug"
-                  params={{ slug: a.slug }}
-                  className="block aspect-[16/9] overflow-hidden bg-brand-paper"
+                  params={{ slug: article.slug }}
+                  className="block aspect-[16/10] overflow-hidden rounded-lg bg-brand-paper"
                 >
                   <img
-                    src={a.image}
-                    alt={a.title}
-                    loading="lazy"
+                    src={article.image}
+                    alt={article.title}
+                    loading={index === 0 ? "eager" : "lazy"}
                     width={1280}
-                    height={720}
-                    className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+                    height={800}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                   />
                 </Link>
-                <div className="flex flex-1 flex-col p-6">
-                  <div className="flex flex-wrap items-center gap-3 text-xs">
-                    <span className="rounded-full bg-brand-paper px-3 py-1 font-semibold text-brand-green">
-                      {translate(a.category, lang)}
+                <div
+                  className={
+                    index === 0
+                      ? "flex flex-col justify-center p-6 md:p-9"
+                      : "flex flex-1 flex-col pt-5"
+                  }
+                >
+                  <div className="flex flex-wrap items-center gap-3 text-[11px] text-muted-foreground">
+                    <span className="font-medium text-brand-green">
+                      {translate(article.category, lang)}
                     </span>
-                    <span className="inline-flex items-center gap-1 text-muted-foreground">
-                      <Calendar size={12} /> {formatDate(a.date, lang)}
-                    </span>
+                    <span aria-hidden="true">·</span>
+                    <time dateTime={article.date}>{formatDate(article.date, lang)}</time>
                   </div>
-                  <h3 className="mt-3 font-display text-lg font-semibold text-brand-navy">
-                    {a.title}
-                  </h3>
-                  <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
-                    {a.excerpt}
-                  </p>
+                  <h2
+                    className={
+                      index === 0
+                        ? "mt-4 text-2xl font-semibold leading-snug md:text-3xl"
+                        : "mt-3 text-lg font-semibold leading-snug"
+                    }
+                  >
+                    <Link
+                      to="/actualites/$slug"
+                      params={{ slug: article.slug }}
+                      className="hover:text-brand-green"
+                    >
+                      {article.title}
+                    </Link>
+                  </h2>
+                  <p className="mt-3 text-sm leading-7 text-muted-foreground">{article.excerpt}</p>
                   <Link
                     to="/actualites/$slug"
-                    params={{ slug: a.slug }}
-                    className="mt-4 inline-flex w-fit items-center gap-1 text-sm font-semibold text-brand-gold hover:underline"
+                    params={{ slug: article.slug }}
+                    className="text-link mt-5"
                   >
-                    {t("Lire plus", "Read more")} <ArrowRight size={14} />
+                    {t("Lire l’article", "Read the article")} <ArrowRight size={15} />
                   </Link>
                 </div>
               </article>
             ))}
           </div>
-
           {lang === "en" && (
-            <p className="mt-10 rounded-2xl border border-dashed border-border bg-brand-paper/40 p-4 text-center text-xs text-muted-foreground">
-              Note: full article bodies are currently written in French.
+            <p className="mt-10 border-t border-border pt-6 text-xs text-muted-foreground">
+              Articles are currently written in French.
             </p>
           )}
         </div>

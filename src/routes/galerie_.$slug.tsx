@@ -4,8 +4,9 @@ import { Layout } from "@/components/site/Layout";
 import { gallery } from "@/content/site";
 import { useLang, useT } from "@/i18n/context";
 import { translate } from "@/i18n/translations";
+import { ProjectCard } from "@/components/site/ProjectCard";
 
-export const Route = createFileRoute("/galerie/$slug")({
+export const Route = createFileRoute("/galerie_/$slug")({
   loader: ({ params }) => {
     const project = gallery.find((g) => g.slug === params.slug);
     if (!project) throw notFound();
@@ -41,7 +42,9 @@ export const Route = createFileRoute("/galerie/$slug")({
     <Layout>
       <section className="section-pad">
         <div className="mx-auto max-w-3xl px-4 text-center md:px-8">
-          <h1 className="font-display text-2xl font-bold text-brand-navy">Une erreur est survenue</h1>
+          <h1 className="font-display text-2xl font-bold text-brand-navy">
+            Une erreur est survenue
+          </h1>
           <button type="button" onClick={reset} className="btn-gold mt-6">
             Réessayer
           </button>
@@ -60,8 +63,8 @@ function ProjectDetail() {
 
   return (
     <Layout>
-      <section className="relative overflow-hidden bg-gradient-to-b from-brand-paper/60 to-background">
-        <div className="mx-auto max-w-6xl px-4 pt-10 md:px-8">
+      <section className="border-b border-border bg-[#fbfcf8]">
+        <div className="site-container py-10 md:py-14">
           <Link
             to="/galerie"
             className="inline-flex items-center gap-1 text-sm font-semibold text-brand-navy hover:text-brand-gold"
@@ -71,22 +74,26 @@ function ProjectDetail() {
 
           <div className="mt-6 grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center">
             <div className="animate-fade-in">
-              <span className="inline-block rounded-full bg-brand-paper px-3 py-1 text-xs font-semibold uppercase tracking-wider text-brand-green">
-                {translate(project.category, lang)}
-              </span>
-              <h1 className="mt-4 font-display text-3xl font-bold leading-tight text-brand-navy md:text-5xl">
+              <span className="eyebrow">{translate(project.category, lang)}</span>
+              <h1 className="mt-4 text-3xl font-semibold leading-[1.15] tracking-[-0.05em] text-brand-navy md:text-4xl">
                 {project.title}
               </h1>
-              <p className="mt-4 text-base leading-relaxed text-muted-foreground md:text-lg">
-                {project.description}
-              </p>
+              <p className="mt-5 text-sm leading-7 text-muted-foreground">{project.description}</p>
 
               <div className="mt-6 grid gap-3 sm:grid-cols-3">
                 {project.client && (
-                  <MetaCard icon={<User size={16} />} label={t("Client", "Client")} value={project.client} />
+                  <MetaCard
+                    icon={<User size={16} />}
+                    label={t("Client", "Client")}
+                    value={project.client}
+                  />
                 )}
                 {project.year && (
-                  <MetaCard icon={<Calendar size={16} />} label={t("Année", "Year")} value={project.year} />
+                  <MetaCard
+                    icon={<Calendar size={16} />}
+                    label={t("Année", "Year")}
+                    value={project.year}
+                  />
                 )}
                 {project.stack && (
                   <MetaCard
@@ -99,8 +106,7 @@ function ProjectDetail() {
             </div>
 
             <div className="relative animate-fade-in">
-              <div className="absolute -inset-4 rounded-3xl bg-gradient-to-tr from-brand-gold/20 via-transparent to-brand-green/20 blur-2xl" />
-              <div className="relative overflow-hidden rounded-2xl border border-border bg-white shadow-2xl ring-1 ring-brand-navy/10">
+              <div className="relative overflow-hidden rounded-xl border border-border bg-white p-2">
                 <img
                   src={project.image}
                   alt={project.title}
@@ -114,7 +120,7 @@ function ProjectDetail() {
 
       <section className="section-pad">
         <div className="mx-auto grid max-w-6xl gap-12 px-4 md:px-8 lg:grid-cols-[1.4fr_1fr]">
-          <div className="space-y-5 text-base leading-relaxed text-foreground/85">
+          <div className="prose-content space-y-5 text-[15px] text-foreground/85">
             <h2 className="font-display text-2xl font-bold text-brand-navy">
               {t("À propos du projet", "About the project")}
             </h2>
@@ -162,7 +168,8 @@ function ProjectDetail() {
               </div>
             )}
             <Link to="/contact" className="btn-gold w-full justify-center">
-              {t("Discuter d'un projet similaire", "Discuss a similar project")} <ArrowRight size={16} />
+              {t("Discuter d'un projet similaire", "Discuss a similar project")}{" "}
+              <ArrowRight size={16} />
             </Link>
           </aside>
         </div>
@@ -175,28 +182,8 @@ function ProjectDetail() {
               {t("Autres réalisations", "Other projects")}
             </h2>
             <div className="mt-8 grid gap-6 md:grid-cols-3">
-              {related.map((r) => (
-                <Link
-                  key={r.slug}
-                  to="/galerie/$slug"
-                  params={{ slug: r.slug }}
-                  className="group card-soft card-soft-hover block overflow-hidden transition-all duration-300 hover:-translate-y-1"
-                >
-                  <div className="aspect-[16/10] overflow-hidden bg-brand-navy">
-                    <img
-                      src={r.image}
-                      alt={r.title}
-                      loading="lazy"
-                      className="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                    />
-                  </div>
-                  <div className="p-5">
-                    <span className="text-xs font-semibold text-brand-green">{translate(r.category, lang)}</span>
-                    <h3 className="mt-2 font-display text-base font-semibold text-brand-navy group-hover:text-brand-gold">
-                      {r.title}
-                    </h3>
-                  </div>
-                </Link>
+              {related.map((item) => (
+                <ProjectCard key={item.slug} project={item} />
               ))}
             </div>
           </div>
@@ -206,17 +193,9 @@ function ProjectDetail() {
   );
 }
 
-function MetaCard({
-  icon,
-  label,
-  value,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: string;
-}) {
+function MetaCard({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
-    <div className="rounded-xl border border-border bg-white/80 p-3 backdrop-blur">
+    <div className="border-l border-border px-3 py-1">
       <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-brand-green">
         {icon} {label}
       </div>

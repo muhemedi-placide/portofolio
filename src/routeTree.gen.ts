@@ -14,8 +14,8 @@ import { Route as ActualitesRouteImport } from './routes/actualites'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as GalerieRouteImport } from './routes/galerie'
 import { Route as TarificataireRouteImport } from './routes/tarificataire'
-import { Route as ActualitesSlugRouteImport } from './routes/actualites.$slug'
-import { Route as GalerieSlugRouteImport } from './routes/galerie.$slug'
+import { Route as ActualitesSlugRouteImport } from './routes/actualites_.$slug'
+import { Route as GalerieSlugRouteImport } from './routes/galerie_.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -43,30 +43,30 @@ const TarificataireRoute = TarificataireRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const ActualitesSlugRoute = ActualitesSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => ActualitesRoute,
+  id: '/actualites_/$slug',
+  path: '/actualites/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const GalerieSlugRoute = GalerieSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => GalerieRoute,
+  id: '/galerie_/$slug',
+  path: '/galerie/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/actualites': typeof ActualitesRouteWithChildren
+  '/actualites': typeof ActualitesRoute
   '/contact': typeof ContactRoute
-  '/galerie': typeof GalerieRouteWithChildren
+  '/galerie': typeof GalerieRoute
   '/tarificataire': typeof TarificataireRoute
   '/actualites/$slug': typeof ActualitesSlugRoute
   '/galerie/$slug': typeof GalerieSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/actualites': typeof ActualitesRouteWithChildren
+  '/actualites': typeof ActualitesRoute
   '/contact': typeof ContactRoute
-  '/galerie': typeof GalerieRouteWithChildren
+  '/galerie': typeof GalerieRoute
   '/tarificataire': typeof TarificataireRoute
   '/actualites/$slug': typeof ActualitesSlugRoute
   '/galerie/$slug': typeof GalerieSlugRoute
@@ -74,12 +74,12 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/actualites': typeof ActualitesRouteWithChildren
+  '/actualites': typeof ActualitesRoute
   '/contact': typeof ContactRoute
-  '/galerie': typeof GalerieRouteWithChildren
+  '/galerie': typeof GalerieRoute
   '/tarificataire': typeof TarificataireRoute
-  '/actualites/$slug': typeof ActualitesSlugRoute
-  '/galerie/$slug': typeof GalerieSlugRoute
+  '/actualites_/$slug': typeof ActualitesSlugRoute
+  '/galerie_/$slug': typeof GalerieSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -107,16 +107,18 @@ export interface FileRouteTypes {
     | '/contact'
     | '/galerie'
     | '/tarificataire'
-    | '/actualites/$slug'
-    | '/galerie/$slug'
+    | '/actualites_/$slug'
+    | '/galerie_/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ActualitesRoute: typeof ActualitesRouteWithChildren
+  ActualitesRoute: typeof ActualitesRoute
   ContactRoute: typeof ContactRoute
-  GalerieRoute: typeof GalerieRouteWithChildren
+  GalerieRoute: typeof GalerieRoute
   TarificataireRoute: typeof TarificataireRoute
+  ActualitesSlugRoute: typeof ActualitesSlugRoute
+  GalerieSlugRoute: typeof GalerieSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -156,52 +158,31 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TarificataireRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/actualites/$slug': {
-      id: '/actualites/$slug'
-      path: '/$slug'
+    '/actualites_/$slug': {
+      id: '/actualites_/$slug'
+      path: '/actualites/$slug'
       fullPath: '/actualites/$slug'
       preLoaderRoute: typeof ActualitesSlugRouteImport
-      parentRoute: typeof ActualitesRoute
+      parentRoute: typeof rootRouteImport
     }
-    '/galerie/$slug': {
-      id: '/galerie/$slug'
-      path: '/$slug'
+    '/galerie_/$slug': {
+      id: '/galerie_/$slug'
+      path: '/galerie/$slug'
       fullPath: '/galerie/$slug'
       preLoaderRoute: typeof GalerieSlugRouteImport
-      parentRoute: typeof GalerieRoute
+      parentRoute: typeof rootRouteImport
     }
   }
 }
 
-interface ActualitesRouteChildren {
-  ActualitesSlugRoute: typeof ActualitesSlugRoute
-}
-
-const ActualitesRouteChildren: ActualitesRouteChildren = {
-  ActualitesSlugRoute: ActualitesSlugRoute,
-}
-
-const ActualitesRouteWithChildren = ActualitesRoute._addFileChildren(
-  ActualitesRouteChildren,
-)
-
-interface GalerieRouteChildren {
-  GalerieSlugRoute: typeof GalerieSlugRoute
-}
-
-const GalerieRouteChildren: GalerieRouteChildren = {
-  GalerieSlugRoute: GalerieSlugRoute,
-}
-
-const GalerieRouteWithChildren =
-  GalerieRoute._addFileChildren(GalerieRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ActualitesRoute: ActualitesRouteWithChildren,
+  ActualitesRoute: ActualitesRoute,
   ContactRoute: ContactRoute,
-  GalerieRoute: GalerieRouteWithChildren,
+  GalerieRoute: GalerieRoute,
   TarificataireRoute: TarificataireRoute,
+  ActualitesSlugRoute: ActualitesSlugRoute,
+  GalerieSlugRoute: GalerieSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

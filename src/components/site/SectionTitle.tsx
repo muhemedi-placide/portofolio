@@ -5,24 +5,38 @@ export function SectionTitle({
   title,
   subtitle,
   align = "left",
+  as: Heading = "h2",
 }: {
   eyebrow?: string;
   title: ReactNode;
   subtitle?: ReactNode;
   align?: "left" | "center";
+  as?: "h1" | "h2";
 }) {
   return (
     <div className={align === "center" ? "mx-auto max-w-2xl text-center" : "max-w-2xl"}>
       {eyebrow && (
-        <span className="inline-block rounded-full bg-brand-paper px-3 py-1 text-xs font-semibold uppercase tracking-wider text-brand-green">
+        <span className={["eyebrow", align === "center" ? "justify-center" : ""].join(" ")}>
           {eyebrow}
         </span>
       )}
-      <h2 className="mt-3 font-display text-3xl font-bold text-brand-navy md:text-4xl">
+      <Heading
+        className={[
+          "mt-4 font-semibold leading-[1.15] text-brand-navy",
+          Heading === "h1"
+            ? "text-4xl tracking-[-0.055em] md:text-5xl"
+            : "text-3xl md:text-[2.5rem]",
+        ].join(" ")}
+      >
         {title}
-      </h2>
+      </Heading>
       {subtitle && (
-        <p className="mt-4 text-base leading-relaxed text-muted-foreground md:text-lg">
+        <p
+          className={[
+            "mt-5 max-w-xl text-[15px] leading-[1.8] text-muted-foreground",
+            align === "center" ? "mx-auto" : "",
+          ].join(" ")}
+        >
           {subtitle}
         </p>
       )}

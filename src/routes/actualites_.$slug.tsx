@@ -5,7 +5,7 @@ import { articles } from "@/content/site";
 import { useLang, useT } from "@/i18n/context";
 import { translate } from "@/i18n/translations";
 
-export const Route = createFileRoute("/actualites/$slug")({
+export const Route = createFileRoute("/actualites_/$slug")({
   loader: ({ params }) => {
     const article = articles.find((a) => a.slug === params.slug);
     if (!article) throw notFound();
@@ -41,7 +41,9 @@ export const Route = createFileRoute("/actualites/$slug")({
     <Layout>
       <section className="section-pad">
         <div className="mx-auto max-w-3xl px-4 text-center md:px-8">
-          <h1 className="font-display text-2xl font-bold text-brand-navy">Une erreur est survenue</h1>
+          <h1 className="font-display text-2xl font-bold text-brand-navy">
+            Une erreur est survenue
+          </h1>
           <button type="button" onClick={reset} className="btn-gold mt-6">
             Réessayer
           </button>
@@ -57,6 +59,7 @@ function formatDate(iso: string, lang: string) {
     day: "numeric",
     month: "long",
     year: "numeric",
+    timeZone: "UTC",
   });
 }
 
@@ -68,8 +71,8 @@ function ArticleDetail() {
 
   return (
     <Layout>
-      <article className="bg-gradient-to-b from-brand-paper/60 to-background">
-        <div className="mx-auto max-w-3xl px-4 pt-10 pb-6 md:px-8">
+      <article className="bg-[#fbfcf8]">
+        <div className="mx-auto max-w-3xl px-6 pt-10 pb-8 md:px-8 md:pt-14">
           <Link
             to="/actualites"
             className="inline-flex items-center gap-1 text-sm font-semibold text-brand-navy hover:text-brand-gold"
@@ -84,7 +87,7 @@ function ArticleDetail() {
               <Calendar size={12} /> {formatDate(article.date, lang)}
             </span>
           </div>
-          <h1 className="mt-4 font-display text-3xl font-bold leading-tight text-brand-navy md:text-4xl">
+          <h1 className="mt-5 text-3xl font-semibold leading-tight tracking-[-0.05em] text-brand-navy md:text-5xl">
             {article.title}
           </h1>
         </div>
@@ -94,7 +97,7 @@ function ArticleDetail() {
             alt={article.title}
             width={1280}
             height={720}
-            className="aspect-[16/9] w-full rounded-2xl object-cover shadow-lg"
+            className="aspect-[16/9] w-full rounded-xl object-cover"
           />
         </div>
         <div className="mx-auto max-w-3xl px-4 py-10 md:px-8 md:py-16">
@@ -103,7 +106,7 @@ function ArticleDetail() {
               Note: the full article below is written in French.
             </p>
           )}
-          <div className="prose-content space-y-5 text-base leading-relaxed text-foreground/85">
+          <div className="prose-content space-y-6 text-[15px] text-foreground/85">
             {(article.content as string[] | undefined)?.map((paragraph: string, i: number) => (
               <p key={i}>{paragraph}</p>
             ))}
@@ -128,9 +131,9 @@ function ArticleDetail() {
                   key={a.slug}
                   to="/actualites/$slug"
                   params={{ slug: a.slug }}
-                  className="card-soft card-soft-hover block overflow-hidden"
+                  className="group block overflow-hidden"
                 >
-                  <div className="aspect-[16/9] overflow-hidden bg-brand-paper">
+                  <div className="aspect-[16/9] overflow-hidden rounded-lg bg-brand-paper">
                     <img
                       src={a.image}
                       alt={a.title}
@@ -140,8 +143,10 @@ function ArticleDetail() {
                       className="h-full w-full object-cover"
                     />
                   </div>
-                  <div className="p-5">
-                    <span className="text-xs font-semibold text-brand-green">{translate(a.category, lang)}</span>
+                  <div className="pt-5">
+                    <span className="text-xs font-semibold text-brand-green">
+                      {translate(a.category, lang)}
+                    </span>
                     <h3 className="mt-2 font-display text-base font-semibold text-brand-navy">
                       {a.title}
                     </h3>
