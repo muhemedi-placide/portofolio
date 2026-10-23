@@ -1,0 +1,165 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-brand-navy: var(--brand-navy);
+  --color-brand-gold: var(--brand-gold);
+  --color-brand-green: var(--brand-green);
+  --color-brand-paper: var(--brand-paper);
+  --color-brand-gray: var(--brand-gray);
+  --font-display: "Fraunces", Georgia, serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+
+:root {
+  --radius: 1rem;
+  --brand-navy: oklch(0.31 0.05 245);
+  --brand-gold: oklch(0.73 0.13 75);
+  --brand-green: oklch(0.5 0.08 165);
+  --brand-paper: oklch(0.96 0.015 85);
+  --brand-gray: oklch(0.55 0.02 260);
+
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.31 0.05 245);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.31 0.05 245);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.31 0.05 245);
+  --primary: var(--brand-navy);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: var(--brand-paper);
+  --secondary-foreground: var(--brand-navy);
+  --muted: var(--brand-paper);
+  --muted-foreground: var(--brand-gray);
+  --accent: var(--brand-gold);
+  --accent-foreground: oklch(0.99 0 0);
+  --destructive: oklch(0.6 0.22 27);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.9 0.01 85);
+  --input: oklch(0.92 0.01 85);
+  --ring: var(--brand-gold);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    color: var(--brand-navy);
+  }
+}
+
+@utility card-soft {
+  background: var(--color-card);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 4px 24px -10px oklch(0.31 0.05 245 / 0.12);
+  border: 1px solid oklch(0.92 0.01 85);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+@utility card-soft-hover {
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px -12px oklch(0.31 0.05 245 / 0.18);
+  }
+}
+@utility btn-gold {
+  background: var(--brand-gold);
+  color: white;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.25s ease;
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px -8px oklch(0.73 0.13 75 / 0.45);
+    filter: brightness(1.05);
+  }
+}
+@utility btn-green {
+  background: var(--brand-green);
+  color: white;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.25s ease;
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px -8px oklch(0.5 0.08 165 / 0.45);
+    filter: brightness(1.05);
+  }
+}
+@utility btn-outline-navy {
+  background: transparent;
+  color: var(--brand-navy);
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  border: 1.5px solid var(--brand-navy);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.25s ease;
+  &:hover {
+    background: var(--brand-navy);
+    color: white;
+  }
+}
+@utility section-pad {
+  padding-block: 4rem;
+  @media (min-width: 768px) {
+    padding-block: 6rem;
+  }
+}
+@utility fade-in-up {
+  animation: fadeInUp 0.7s ease-out both;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
